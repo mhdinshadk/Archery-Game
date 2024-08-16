@@ -16,3 +16,16 @@ span {
 	font-family:sans-serif;
 	opacity: .3;
 }
+
+#score {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+	color:orange
+}
+
+.target-score {
+	color:rgb(233, 139, 15);
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
