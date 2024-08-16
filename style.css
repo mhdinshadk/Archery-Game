@@ -22,10 +22,42 @@ span {
     font-weight: bold;
     margin-top: 20px;
     text-align: center;
-	color:orange
+	color:orange;
+	
+	
 }
 
 .target-score {
-	color:rgb(233, 139, 15);
+	color:rgb(255, 255, 255);
 	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	background-color:rgb(241, 121, 8);
+	width: 10%;
+	border-radius:10px;
+	text-align: center;
 }
+
+.message {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    display: none;
+    padding: 10px;
+    border-radius: 5px;
+	margin-left: 700px;
+    margin-top: 40px;
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.message.red {
+    color: red;
+   
+}
+
+.message.green {
+    color: green;
+   
+}
+
+

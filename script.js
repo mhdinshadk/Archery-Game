@@ -3,13 +3,13 @@ let cursor = svg.createSVGPoint();
 let arrows = document.querySelector(".arrows");
 let randomAngle = 0;
 
-// center of target
+// Center of target
 let target = {
     x: 900,
     y: 249.5
 };
 
-// target intersection line segment
+// Target intersection line segment
 let lineSegment = {
     x1: 875,
     y1: 280,
@@ -17,7 +17,7 @@ let lineSegment = {
     y2: 220
 };
 
-// bow rotation point
+// Bow rotation point
 let pivot = {
     x: 100,
     y: 250
@@ -25,11 +25,11 @@ let pivot = {
 
 let score = 0;
 
-// set up start drag event
+// Set up start drag event
 window.addEventListener("mousedown", draw);
 
 function draw(e) {
-    // pull back arrow
+    // Pull back arrow
     randomAngle = (Math.random() * Math.PI * 0.03) - 0.015;
     TweenMax.to(".arrow-angle use", 0.3, {
         opacity: 1
@@ -40,7 +40,7 @@ function draw(e) {
 }
 
 function aim(e) {
-    // get mouse position in relation to svg position and scale
+    // Get mouse position in relation to svg position and scale
     let point = getMouseSVG(e);
     point.x = Math.min(point.x, pivot.x - 7);
     point.y = Math.max(point.y, pivot.y + 7);
@@ -86,7 +86,7 @@ function aim(e) {
 }
 
 function loose() {
-    // release arrow
+    // Release arrow
     window.removeEventListener("mousemove", aim);
     window.removeEventListener("mouseup", loose);
 
@@ -101,12 +101,12 @@ function loose() {
         },
         ease: Elastic.easeOut
     });
-    // duplicate arrow
+    // Duplicate arrow
     let newArrow = document.createElementNS("http://www.w3.org/2000/svg", "use");
     newArrow.setAttributeNS('http://www.w3.org/1999/xlink', 'href', "#arrow");
     arrows.appendChild(newArrow);
 
-    // animate arrow along path
+    // Animate arrow along path
     let path = MorphSVGPlugin.pathDataToBezier("#arc");
     TweenMax.to([newArrow], 0.5, {
         force3D: true,
@@ -123,14 +123,14 @@ function loose() {
     TweenMax.to("#arc", 0.3, {
         opacity: 0
     });
-    // hide previous arrow
+    // Hide previous arrow
     TweenMax.set(".arrow-angle use", {
         opacity: 0
     });
 }
 
 function hitTest(tween) {
-    // check for collisions with arrow and target
+    // Check for collisions with arrow and target
     let arrow = tween.target[0];
     let transform = arrow._gsTransform;
     let radians = transform.rotation * Math.PI / 180;
@@ -166,11 +166,12 @@ function hitTest(tween) {
 
 function onMiss() {
     // Missed the target
+    updateScore(-50); // Deduct 50 points for a miss
     showMessage(".miss");
 }
 
 function showMessage(selector) {
-    // handle all text animations by providing selector
+    // Handle all text animations by providing selector
     TweenMax.killTweensOf(selector);
     TweenMax.killChildTweensOf(selector);
     TweenMax.set(selector, {
@@ -198,14 +199,14 @@ function updateScore(points) {
 }
 
 function getMouseSVG(e) {
-    // normalize mouse position within svg coordinates
+    // Normalize mouse position within svg coordinates
     cursor.x = e.clientX;
     cursor.y = e.clientY;
     return cursor.matrixTransform(svg.getScreenCTM().inverse());
 }
 
 function getIntersection(segment1, segment2) {
-    // find intersection point of two line segments and whether or not the point is on either line segment
+    // Find intersection point of two line segments and whether or not the point is on either line segment
     let dx1 = segment1.x2 - segment1.x1;
     let dy1 = segment1.y2 - segment1.y1;
     let dx2 = segment2.x2 - segment2.x1;
@@ -224,4 +225,38 @@ function getIntersection(segment1, segment2) {
         segment1: ua >= 0 && ua <= 1,
         segment2: ub >= 0 && ub <= 1
     };
+}
+function onMiss() {
+    // Missed the target
+    updateScore(-50); // Deduct 50 points for a miss
+    showMessage(".miss");
+}
+
+function showMessage(selector) {
+    // Handle all text animations by providing selector
+    let message = document.getElementById("message");
+    let text = "";
+    let colorClass = "";
+
+    switch (selector) {
+        case ".bullseye":
+            text = "Bullseye! +100 Points";
+            colorClass = "green";
+            break;
+        case ".hit":
+            text = "Hit! +50 Points";
+            colorClass = "green";
+            break;
+        case ".miss":
+            text = "Missed! -50 Points";
+            colorClass = "red";
+            break;
+    }
+
+    message.innerText = text;
+    message.className = "message " + colorClass;
+    message.style.display = "block";
+    setTimeout(() => {
+        message.style.display = "none";
+    }, 2000); // Hide message after 2 seconds
 }
